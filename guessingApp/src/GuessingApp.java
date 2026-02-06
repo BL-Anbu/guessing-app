@@ -9,7 +9,7 @@ import java.util.Scanner;
  * No users input or gameplay logic is implemented at this stage.
  *
  * @author Anbu A
- * @version 2.0
+ * @version 3.0
  */
 public class GuessingApp {
 
@@ -23,6 +23,7 @@ public class GuessingApp {
 
         Scanner sc = new Scanner(System.in);
         int attempts = 0;
+        int hintsUsed = 0;
 
         /*
          * Game loop runs until the player exhausts the
@@ -35,6 +36,17 @@ public class GuessingApp {
 
             String result = GuessValidator.validateGuess(guess, gameConfig.getTargetNumber());
 
+            /*
+             * A hint is generated only after
+             * an incorrect guess and within
+             * the allowed hint limit.
+             */
+            if (!CORRECT.equals(result) && hintsUsed < gameConfig.getMAX_HINTS()) {
+                hintsUsed++;
+                System.out.println(
+                        HintService.generateHint(guess,gameConfig.getTargetNumber(), hintsUsed)
+                );
+            }
             System.out.println(result);
 
             /*
