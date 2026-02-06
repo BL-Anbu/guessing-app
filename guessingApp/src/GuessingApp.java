@@ -9,13 +9,13 @@ import java.util.Scanner;
  * No users input or gameplay logic is implemented at this stage.
  *
  * @author Anbu A
- * @version 3.0
+ * @version 4.0
  */
 public class GuessingApp {
 
     public static final String CORRECT = "CORRECT";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidInputException {
 
         System.out.println("Welcome to the Guessing App");
         GameConfig gameConfig = new GameConfig();
@@ -31,7 +31,7 @@ public class GuessingApp {
          */
         while (attempts < gameConfig.getMAX_ATTEMPTS()) {
             System.out.println("Enter your guess: ");
-            int guess = sc.nextInt();
+            int guess = ValidationService.validateInput(sc.nextLine());
             attempts++;
 
             String result = GuessValidator.validateGuess(guess, gameConfig.getTargetNumber());
@@ -44,7 +44,7 @@ public class GuessingApp {
             if (!CORRECT.equals(result) && hintsUsed < gameConfig.getMAX_HINTS()) {
                 hintsUsed++;
                 System.out.println(
-                        HintService.generateHint(guess,gameConfig.getTargetNumber(), hintsUsed)
+                        HintService.generateHint(guess, gameConfig.getTargetNumber(), hintsUsed)
                 );
             }
             System.out.println(result);
