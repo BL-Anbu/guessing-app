@@ -1,29 +1,48 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * GuessingApp Use Case 1: Game Initialization
+ * GuessingApp Use Case 5: Game Result Storage
  * <p>
- * This class serves as the application entry point.
- * It initializes the game configuration and displaysgame rules.
+ * This class coordinates the complete game flow
+ * and persists the final result after completion.
  * <p>
- * No users input or gameplay logic is implemented at this stage.
+ * Responsibilities:
+ * - Initialize game configuration
+ * - Accept and validate user guesses
+ * - Generate hints when applicable
+ * - Store game result at the end
  *
  * @author Anbu A
- * @version 4.0
+ * @version 5.0
  */
 public class GuessingApp {
 
     public static final String CORRECT = "CORRECT";
 
-    public static void main(String[] args) throws InvalidInputException {
+    public static void main(String[] args) throws InvalidInputException, IOException {
 
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("=========================================");
         System.out.println("Welcome to the Guessing App");
+        System.out.println("=========================================");
+        /*
+         * Player name is captured once
+         * and stored along with game results.
+         */
+        System.out.print("Enter Player Name: ");
+        String player = scanner.nextLine();
+
         GameConfig gameConfig = new GameConfig();
         gameConfig.showRules();
 
-        Scanner sc = new Scanner(System.in);
         int attempts = 0;
         int hintsUsed = 0;
+
+        /*
+         * Tracks whether the player successfully guessed the number.
+         */
+        boolean win = false;
 
         /*
          * Game loop runs until the player exhausts the
@@ -31,7 +50,7 @@ public class GuessingApp {
          */
         while (attempts < gameConfig.getMAX_ATTEMPTS()) {
             System.out.println("Enter your guess: ");
-            int guess = ValidationService.validateInput(sc.nextLine());
+            int guess = ValidationService.validateInput(scanner.nextLine());
             attempts++;
 
             String result = GuessValidator.validateGuess(guess, gameConfig.getTargetNumber());
@@ -57,5 +76,10 @@ public class GuessingApp {
                 break;
             }
         }
+        /*
+         * Final game result is persisted
+         *  after the game loop completes.
+         */
+        StorageService.saveResult(player, attempts, win);
     }
 }

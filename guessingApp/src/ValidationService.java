@@ -20,12 +20,13 @@ public class ValidationService {
         try {
             int value = Integer.parseInt(input);
             if (value < 1 || value > 100) {
-
+                throw new InvalidInputException("Invalid input." +
+                        "Please enter number only.");
             }
+            return value;
         }catch (NumberFormatException e){
             throw new InvalidInputException("Invalid input." +
                     "Please enter number only.");
         }
-        return 0;
     }
 }
